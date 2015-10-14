@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>乐动力×偶像来了女神人气大比拼</title>
+    <style>
+    html,
+    body {
+        margin: 0;
+        background: #000;
+    }
+    
+    img {
+        max-width: 100%;
+        display: block;
+    }
+    
+    .idol-banner {
+        max-width: 1650px;
+        margin: 0 auto
+    }
+    
+    .idol-pics {
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .idol-main {
+        overflow: hidden;
+        padding: 0 35px 20px;
+    }
+    
+    .idol-bar {
+        overflow: hidden;
+        float: left;
+        width: 50%;
+    }
+    
+    .idol-bar-item {
+        float: left;
+        width: 20%;
+        color: rgb(199, 130, 44);
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .vote-bar {
+        height: 10px;
+        width: 50%;
+        border-radius: 15px;
+        overflow: hidden;
+        margin: 10px auto;
+    }
+    
+    .vote-bar span {
+        display: inline-block;
+        height: 100%;
+        min-width: 10%;
+        background: rgb(180, 139, 53);
+        float: left;
+        border-radius: 15px;
+    }
+    </style>
+   <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "//hm.baidu.com/hm.js?7713a9aec777fe56c07e27d0dcad6bb7";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="idol-banner">
+            <img src="images/web_banner.jpg">
+            <div class="idol-main">
+                <div class="idol-bar">
+                    <div class="idol-bar-item" id="idol3">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                            <strong> - </strong>票
+                        </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol8">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol1">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count" >
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol2">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol0">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                </div>
+                <div class="idol-bar">
+                    <div class="idol-bar-item" id="idol6">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol7">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol5">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol9">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                    <div class="idol-bar-item" id="idol4">
+                        <div class="vote-bar">
+                            <span></span>
+                        </div>
+                        <span class="vote-count">
+                        <strong> - </strong>票
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="idol-footer">
+            <img src="images/ldl_footer.jpg">
+        </div>
+    </div>
+    <script src="js/lib/zepto.min.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+    (function() {
+        //工具方法
+        var tool = {
+            //arr为数字数组,max返回数组中的最大值
+            max: function(arr) {
+                return arr.sort(function(a, b) {
+                    return a - b;
+                })[arr.length - 1];
+            }
+        };
+
+
+        /*接口地址*/
+        var objConfig = {
+            url: "http://walk.ledongli.cn:8090/v2/rest/open/idol/get_info",
+            // url: "http://walk.ledongli.cn:8090/v2/rest/open/idol/get_info",
+            baseNum: 1000
+        };
+        //换算百分比需要一个基数，百分比就是进度条的长度,根据实际投票数将最大数作为百分比基数
+        //获取10个偶像数据，遍历填充页面上的数据和idolVotes数组
+        getData(objConfig.url).done(function(d){
+            var idolVotes = []; //10个偶像的投票数,下面获取最大值会需要
+            var tmpVotes = [];
+            if(d.errorCode == 0){
+                var result = d.ret;
+                console.log(d.ret);
+                for(var i = 0; i < 10; i++){
+                    idolVotes[i] = result[i].num;
+                    tmpVotes[i] = idolVotes[i];
+                      console.log(result[i].id+" "+idolVotes[i]);
+                }
+                console.log(idolVotes);
+                var baseNum = tool.max(tmpVotes) || objConfig.baseNum;
+                 //填充某个人的票数
+                for(var i=0;i<10;i++){
+                    $("#idol"+i).find(".vote-count strong").text(""+idolVotes[i]);
+
+                    //填充某个人的支持百分比
+                    $("#idol"+i).find(".vote-bar span").css({width: (idolVotes[i] / baseNum)*100 + "%"
+                });
+                }
+            }
+        });
+
+        // //baseNum是百分比基数
+        // var baseNum = tool.max(idolVotes) || objConfig.baseNum;
+        // //根据前后端约定的偶像id，手动为class为idol-bar-item的元素添加id,
+        // //然后根据服务器端返回的数据遍历填充每个偶像的票数，以下是填充一个人票数的示例
+
+       
+    })();
+
+    function getData(url){
+        var deferred = $.Deferred();
+        deferred.fail(function() {
+            window.console && window.console.error('web connection error or server error');
+        });
+        $.ajax({
+            type: "POST",
+            url:url,
+            jsonp:"callback",
+            dataType:"jsonp",
+            timeout:5000,
+            success: function(data) {
+                deferred.resolve(data);
+            },
+            error: function(err) {
+                deferred.reject(err);
+            },
+        });
+        return deferred;
+    }
+    </script>
+</body>
+
+</html>

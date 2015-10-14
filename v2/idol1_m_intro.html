@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>乐动力×偶像来了女神人气大比拼</title>
+    <style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+    }
+    
+    .fullPage-wp {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    
+    .fullPage-wp:after {
+        display: block;
+        content: ' ';
+        height: 0;
+        clear: both;
+    }
+    
+    .fullPage-wp.anim {
+        -webkit-transition: all 500ms ease-out 0s;
+        transition: all 500ms ease-out 0s;
+    }
+    
+    .fullPage-page {
+        display: block;
+        overflow: hidden;
+    }
+    .page{
+        background-color: #0f0408;
+    }
+    .fullPage-dir-h {
+        float: left;
+    }
+    
+    #container {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .arrow {
+        position: absolute;
+        width: 100%;
+        bottom: 30px;
+        text-align: center;
+    }
+    
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    @-webkit-keyframes jump {
+        0% {
+            opacity: .5;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+        100% {
+            opacity: .9;
+            -webkit-transform: translate3d(0, 10px, 0);
+        }
+    }
+    
+    @keyframes jump {
+        0% {
+            opacity: .5;
+            transform: translate3d(0, 0, 0);
+        }
+        100% {
+            opacity: .9;
+            transform: translate3d(0, 10px, 0);
+        }
+    }
+    
+    .jump {
+        width: 30px;
+        -webkit-animation: jump 1s alternate infinite;
+        animation: jump 1s alternate infinite;
+    }
+    </style>
+<script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "//hm.baidu.com/hm.js?3e81b5996e1143de43b693e53efc122c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+
+<body>
+    <!-- 活动介绍 -->
+    <div class = "wp" id="container">
+        <div class="wp-inner">
+            <div class="page" align="center">
+                <!-- 第一张图片 -->
+                <!-- <div id="img1"></div> -->
+                <img src="images/page1.jpg" alt="乐活动，偶像来了">
+            </div>
+            <div class="page" align="center">
+                <!-- 第二张图片 -->
+                <img src="images/page2.jpg" alt="活动规则">
+            </div>
+            <div id="toVote" class="page" align="center">
+                <!-- 第三张图片 -->
+                <img src="images/page3.jpg" alt="活动规则">
+            </div>
+        </div>
+        <div class="arrow">
+            <!--箭头图片替换-->
+            <img class="jump" src="images/arrow.png">
+        </div>
+        <div class="share_button" id="share_intro" style="display:none;"></div>
+    </div>
+    <script src="js/lib/zepto.min.js"></script>
+    <script src="js/lib/zepto.fullpage.js"></script>
+    <script src="js/min/common.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+    $('.wp-inner').fullpage();
+    (function() {
+
+        $(".wrapper").fullpage();
+
+        //处理最后一屏滑动跳转
+        var start, end;
+        $("#toVote").on("touchstart", function(evt) {
+            start = evt.changedTouches[0].clientY;
+        }).on("touchend", function(evt) {
+            end = evt.changedTouches[0].clientY;
+            if (start - end > 20) {
+                location.href = "idol1_m_vote.html";
+            }
+        });
+
+
+        // share
+        var params = ldl.getUrlObj(),
+                showGuide = params.hash.showGuide,
+                showShare = params.hash.showShare;
+
+            //微信浮层
+            if (showGuide==1) {
+                //从join页过来 如果带有hash里showGuide=1需要显示引导层
+                var $downloadPanel = $('#downloadPanel').show(),
+                    $weixinMask = $('#weixinMask');
+
+                $downloadPanel.on('tap', function(){
+                    $weixinMask.show();
+                });
+                $weixinMask.on('tap', function(){
+                    $(this).hide();
+                });
+            } else {
+                $('#downloadPanel, #weixinMask').remove();
+            }
+
+            // 分享
+            var $share = $('#share'),
+                $doc = $('body');
+            if (showShare==1) {
+                $doc.on('touchmove', _pd);
+                $share.show().find('.close').on('tap', function(){
+                    $share.remove();
+                    $doc.off('touchmove', _pd);
+                });
+            } else {
+                $share.remove();
+            };
+
+            function _pd(e) {
+                e.preventDefault();
+            }
+        // })();
+
+        //在微信和app中拿用户数据并保存在session
+        ldl.getUserData()
+        //参数检查
+        .done(function(){
+            // var params = ldl.getUrlObj(),
+            //     gid = params.search.state || params.hash.gid || params.search.gid;
+
+            // if (!gid) {
+            //     return $.Deferred().reject('缺少gid');
+            // };
+            // ldl.userData.gid = gid;
+        })
+        .fail(function() {
+            //如果在浏览器打开,根据需要跳转
+            if (!ldl.isWeixin && !ldl.isApp && ldl.getUrlObj().hash.showGuide==1) {
+            // if (!ldl.isWeixin && !ldl.isApp) {
+                ldl.checkOs().always(function() {
+                    if (!ldl.appInstalled){
+                        window.location = ldl.url2Download;
+                    }
+                });
+            }
+             //微信分享
+                var wxScript = document.createElement('script');
+                wxScript.src = 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js';
+                wxScript.onload = function(){
+                    ldl.getData('http://walk.ledongli.cn:8090/v2/rest/users/wechatjssign',{url:encodeURIComponent(location.href)}).done(function(d){
+                        wx.config({
+                            debug: false,
+                            appId: 'wx13e719bc136549a8',
+                            timestamp: d.ret.timestamp,
+                            nonceStr: d.ret.nonceStr,
+                            signature: d.ret.signature,
+                            jsApiList: [
+                                'onMenuShareTimeline' ,
+                                'onMenuShareAppMessage' ,
+                                'onMenuShareQQ' ,
+                                'onMenuShareWeibo'
+                            ]
+                        });
+                        wx.ready(function () {
+                            var wxData = {
+                                title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                                desc: '乐动力步数投票，爱她就让她去人气组！',
+                                // link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
+                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
+                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg',
+                                success: function () {
+                                    // 用户确认分享后执行的回调函数
+                                    $("#share_intro").click();
+                                }
+                            };
+                            wx.onMenuShareAppMessage(wxData);
+                            wx.onMenuShareTimeline(wxData);
+                            wx.onMenuShareQQ(wxData);
+                            wx.onMenuShareWeibo(wxData);
+                        });
+                    });
+                }
+                document.body.appendChild(wxScript);
+        })
+        .then(function() {
+            if (ldl.isApp){
+                //分享
+                var shareData = {
+                    // image_url:ldl.userData.avatarImage,
+                    image_url:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg',
+                    // link_url:'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
+                    link_url:'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
+                    title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                    content:'乐动力步数投票，爱她就让她去人气组！',
+                    shared_to:1
+                };
+                ldl.app.setWebViewShare(JSON.stringify(shareData));
+            } else if(ldl.isWeixin){
+                //微信分享
+                var wxScript = document.createElement('script');
+                wxScript.src = 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js';
+                wxScript.onload = function(){
+                    ldl.getData('http://walk.ledongli.cn:8090/v2/rest/users/wechatjssign',{url:encodeURIComponent(location.href)}).done(function(d){
+                        wx.config({
+                            debug: false,
+                            appId: 'wx13e719bc136549a8',
+                            timestamp: d.ret.timestamp,
+                            nonceStr: d.ret.nonceStr,
+                            signature: d.ret.signature,
+                            jsApiList: [
+                                'onMenuShareTimeline' ,
+                                'onMenuShareAppMessage' ,
+                                'onMenuShareQQ' ,
+                                'onMenuShareWeibo'
+                            ]
+                        });
+                        wx.ready(function () {
+                            var wxData = {
+                                title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                                desc: '乐动力步数投票，爱她就让她去人气组！',
+                                // link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
+                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
+                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg'
+                            };
+                            wx.onMenuShareAppMessage(wxData);
+                            wx.onMenuShareTimeline(wxData);
+                            wx.onMenuShareQQ(wxData);
+                            wx.onMenuShareWeibo(wxData);
+                        });
+                    });
+                }
+                document.body.appendChild(wxScript);
+            }
+        });
+        //判断群组类型
+
+
+    })();
+    </script>
+</body>
+
+</html>

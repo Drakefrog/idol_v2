@@ -1,0 +1,2 @@
+$(function(){function a(){alert("do search")}function b(){alert("do research")}function c(){alert("do create")}var d=($(document.body),$("#searchBox"),$("#searchBox .tip")),e=$("#searchBox .kw"),f=($("#searchRe"),$("#searchReListBox"),$("#searchNoresult"),$("#searchNoresult .retry")),g=$("#searchNoresult .create");e.on("keyup",function(b){e.val().trim().length>0&&13==b.which&&a()}).on("focus blur input",function(){""==e.val()?d.show():d.hide()}),f.on("click",b),g.on("click",c)});
+//# sourceMappingURL=search.map

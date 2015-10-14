@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>f016乐动力×偶像来了女神人气大比拼</title>
+    <style>
+    html,
+    body {
+        margin: 0;
+    }
+    
+    img {
+        max-width: 100%;
+    }
+    
+    #vote {
+        position: relative;
+    }
+    
+    #vote img {
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        z-index: -10;
+    }
+    
+    .vote-item {
+        position: absolute;
+        color: #B58C4C;
+        height: 60px;
+        width: 100px;
+        text-align: center;
+    }
+    
+    .vote-item p {
+        font-weight: bold;
+    }
+    
+    .vote-item button {
+        position: relative;
+        display: block;
+        background: url(images/vote1.png);
+        width: 70px;
+        height: 26px;
+        display: inline-block;
+        background-size: cover;
+        border: none;
+    }
+    
+    .vote-item button.disable {
+        background: url(images/vote2.png);
+        background-size: cover;
+    }
+    
+    .vote-item[data-roleid='0'] {
+        top: 3.5%;
+        left: 26%;
+    }
+    
+    .vote-item[data-roleid='1'] {
+        top: 13%;
+        right: 26%;
+    }
+    
+    .vote-item[data-roleid='2'] {
+        top: 19%;
+        left: 50%;
+    }
+    
+    .vote-item[data-roleid='3'] {
+        top: 31%;
+        left: 38%;
+    }
+    
+    .vote-item[data-roleid='4'] {
+        top: 42.5%;
+        left: 44%;
+    }
+    
+    .vote-item[data-roleid='5'] {
+        top: 52%;
+        left: 40%;
+    }
+    
+    .vote-item[data-roleid='6'] {
+        top: 62.5%;
+        left: 32%;
+    }
+    
+    .vote-item[data-roleid='7'] {
+        top: 72.5%;
+        left: 42%;
+    }
+    
+    .vote-item[data-roleid='8'] {
+        top: 83.3%;
+        left: 46%;
+    }
+    
+    .vote-item[data-roleid='9'] {
+        top: 92.5%;
+        left: 33%;
+    }
+    
+    .outapp {
+        background: #F39801;
+        position: fixed;
+        bottom:0px;
+    }
+    /*投票+1动画*/
+    
+    @-webkit-keyframes showup {
+        0% {
+            opacity: 0;
+            -webkit-transform: translateY(0);
+        }
+        50% {
+            opacity: 1;
+            -webkit-transform: translateY(-20px);
+        }
+        100% {
+            opacity: 0;
+            -webkit-transform: translateY(-30px);
+        }
+    }
+    
+    @keyframes showup {
+        0% {
+            opacity: 0;
+            transform: translateY(0);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+    }
+    
+    .showup {
+        font-size: 20px;
+        color: #B58C4C;
+        position: absolute;
+        left: 100%;
+        -webkit-animation: showup 1s forwards;
+        animation: showup 1s forwards;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 投票部分 -->
+    <div id="vote">
+        <img src="images/page4.jpg">
+        <div class="vote-item" id="idol0" data-roleid="0">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol1" data-roleid="1">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol2" data-roleid="2">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol3" data-roleid="3">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol4" data-roleid="4">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol5" data-roleid="5">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol6" data-roleid="6">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol7" data-roleid="7">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol8" data-roleid="8">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <div class="vote-item" id="idol9" data-roleid="9">
+            <p>人气值<strong>-</strong>票</p>
+            <button></button>
+        </div>
+        <script src="js/lib/zepto.min.js"></script>
+        <script src="js/common.js"></script>
+        <script type="text/javascript">
+        
+        var isInApp;
+        var myUid = 0;
+        var myPc = '';
+        var btnDisabled = false;
+        var idolVotes = []; //10个偶像的投票数,下面获取最大值会需要
+        var today_steps = 0;
+        //得到今天的时间参数
+        var timer = {
+            today:function() {
+                var now = new Date,
+                    start = +new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                return {
+                    startDate: parseInt(start/1000),
+                    endDate: parseInt(+now/1000)
+                }
+            }
+        };
+        (function() {
+            var $vote = $('#vote'),
+                $voteItems = $(".vote-item"),
+                // inapp, //是否在app内打开
+                //获取今日日期，格式"20150801"
+                getToday = function() {
+                    var date = new Date();
+                    var year = "" + date.getFullYear(),
+                        month = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : "" + (date.getMonth() + 1),
+                        day = date.getDate() < 10 ? "0" + date.getDate() : "" + date.getDate();
+                    return year + month + day;
+                },
+                showUp = function(num) {
+                    var $tip = this.find('span.showup');
+                    if ($tip.length) $tip.remove();
+
+                    $tip = $("<span class='showup'/>").text("+" + num);
+                    this.append($tip);
+                    $tip.addClass('showup');
+                };
+            // 判断是否在APP内
+            var userAgent = navigator.userAgent;
+            var isIOS = userAgent.toLowerCase().match(/iphone/i);
+            var isAndroid = userAgent.toLowerCase().match(/android/i);
+            if (isIOS) {
+                if (window.WebViewJavascriptBridge) {
+                    initIosFns(WebViewJavascriptBridge);
+                } else {
+                    document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                        initIosFns(WebViewJavascriptBridge);
+                    }, false);
+                }
+            }
+            else if (isAndroid && typeof web != 'undefined' && typeof web.getUserInfo == 'function') {
+                isInApp = 'android';
+                // init();
+            }
+            function initIosFns(bridge) {
+                isInApp = 'ios';
+                $voteItems.find("button").show();
+                $('#outapp1').remove();
+                clearTimeout(tid);
+
+                bridge.init(function(message, responseCallback) {
+                    ldl.bridgeinited = 'inited';
+                    var data = {
+                        'Javascript Responds': 'Wee!'
+                    }
+                    responseCallback(data);
+                });
+
+                fnNames.forEach(function(name) {
+                    ldl.app[name] = (function(method) {
+                        return function(data) {
+                            var deferred = $.Deferred();
+                            bridge.callHandler(method, data, function(response) {
+                                deferred.resolve(response);
+                            });
+                            return deferred;
+                        };
+                    })(name);
+                });
+
+                deferred.resolve('ios');
+            }
+            // init
+
+            (function init() {
+                //此处代码不完整，js接口检测是否在app内打开页面
+                ldl.getUserData().done(function() {
+                    // ldl.getUserData();
+                    myUid = ldl.userData.uid;
+                    myPc = ldl.userData.pc;
+                    ldl.app.getDailyStatsWithData(JSON.stringify(timer.today())).done(function(dd){
+                        if (dd+'' != 'null'){
+                            var data = JSON.parse(dd);
+                            if (ldl.isApp == 'ios') {
+                                if(data.DailyStats && data.DailyStats[0]){
+                                    data.DailyStats[0] = JSON.parse(data.DailyStats[0]);
+                                    today_steps = data.DailyStats[0].steps;
+                                }
+                            } else if(ldl.isApp == 'android'){
+                                if(data.dailystats && data.dailystats[0]){
+                                    today_steps = data.dailystats[0].steps;
+                                }
+                            }
+                            
+                        }
+                    });
+                });
+                if (isInApp) {
+                    
+                } else {
+                    $voteItems.find("button").hide();
+                    //js接口检测,如果不在app内打开，投票页面显示引导按钮，下载app或拉起app
+                    //需要修改href属性值
+                    var templ = '<div class="outapp" id="outapp1">' +
+                        '<a href="http://wise-adapt.ledongli.cn">' +
+                        '<img src="images/foot_banner.jpg"/>' +
+                        '</a>' +
+                        '</div>';
+                    $("body").append($(templ));
+                }
+
+
+                //访问后台接口，展示人气值
+                getData("http://walk.ledongli.cn:8090/v2/rest/open/idol/get_info").done(function(d){
+                    if(d.errorCode == 0){
+                        var result = d.ret;
+                        for(var i = 0; i < 10; i++){
+                            idolVotes[i] = result[i].num;
+                        }
+                        console.log(idolVotes);
+                        //填充某个人的票数
+                        for(var i = 0; i < 10; i++){
+                            $("#idol"+i).find(".vote-item strong").text(""+idolVotes[i]);
+                        }
+                    }
+                });
+
+                
+
+                //模仿按钮的激活状态
+                // $voteItems.find("button").on("touchstart", function(evt) {
+                //     $(this).css({
+                //         'opacity': '.9'
+                //     });
+                // }).on("touchend", function() {
+                //     $(this).css({
+                //         'opacity': '1'
+                //     });
+                // });
+
+            })();
+
+            /***** 不在app内打开 结束*****/
+            /***** 在app内打开 开始 *****/
+
+            //根据localStorage判断今天是否投过票
+            var votedToday = function() {
+                var ldl_vote = localStorage.getItem('ldl_vote');
+                if (ldl_vote === null) {
+                    return false;
+                }
+
+                return getToday() > ldl_vote ? false : true;
+            };
+
+            function disableBtn() {
+                $voteItems.find("button").addClass("disable").attr("disabled", true);
+                btnDisabled = true;
+            }
+
+            function checkVote() {
+                if (votedToday()) {
+                     disableBtn();
+                }
+            }
+            checkVote();
+
+            //投票，调用后台接口，前端处理当日只能投一次，利用localStorage
+            //如果今日已投 localStorage.setItem('ldl_vote','20150801');
+            //人气值在投票后需要更改
+            $voteItems.find("button").on('touchend', function(evt) {
+                var $this = $(this);
+                if(btnDisabled){
+                    return;
+                }
+                var idolId = parseInt($this.parent().attr("data-roleid"));
+                //投票数 5000 = 1票
+                var voteNum = parseInt(today_steps / 5000);
+                alert(voteNum);
+                if (votedToday()) {
+                    alert('今天已经投过票啦！');
+                    disableBtn();
+                    return;
+                } else if (voteNum < 1) {
+                    alert('不足5000步无法投票哦');
+                    return;
+                } else {
+                    var $this = $(this);
+                    //可以投票，请完善这里的方法
+                    $.ajax({
+                        type:"GET",
+                        url: 'http://walk.ledongli.cn:8090/v2/rest/open/idol/vote',
+                        data: {
+                            // uid    : 34728,
+                            // pc     : 'an0d33f6d114c1c6716229696ee9f3a8eb',
+                            uid    : myUid,
+                            pc     : myPc,
+                            idol_id: idolId + 1,
+                            num    : voteNum,
+                        },
+                        jsonp:"callback",
+                        dataType:"jsonp",
+                        timeout:5000,
+                        success: function(data) {
+                            disableBtn();
+                            //更新localStorage
+                            localStorage.setItem('ldl_vote', getToday());
+                            //投票成功显示+n提示
+                            showUp.call($this, voteNum);
+                            //页面人气值更新
+                            $("#idol"+idolId).find(".vote-item strong").text(idolVotes[idolId]+voteNum+"");
+
+                        }
+                    });
+                }
+
+
+            });
+
+            
+            /***** 在app内打开 结束 *****/
+               // share
+        var params = ldl.getUrlObj(),
+                showGuide = params.hash.showGuide,
+                showShare = params.hash.showShare;
+
+            //微信浮层
+            if (showGuide==1) {
+                //从join页过来 如果带有hash里showGuide=1需要显示引导层
+                var $downloadPanel = $('#downloadPanel').show(),
+                    $weixinMask = $('#weixinMask');
+
+                $downloadPanel.on('tap', function(){
+                    $weixinMask.show();
+                });
+                $weixinMask.on('tap', function(){
+                    $(this).hide();
+                });
+            } else {
+                $('#downloadPanel, #weixinMask').remove();
+            }
+
+            // 分享
+            var $share = $('#share'),
+                $doc = $('body');
+            if (showShare==1) {
+                $doc.on('touchmove', _pd);
+                $share.show().find('.close').on('tap', function(){
+                    $share.remove();
+                    $doc.off('touchmove', _pd);
+                });
+            } else {
+                $share.remove();
+            };
+
+            function _pd(e) {
+                e.preventDefault();
+            }
+        // })();
+
+        
+
+        //在微信和app中拿用户数据并保存在session
+        ldl.getUserData()
+        //参数检查
+        .done(function(){
+            // var params = ldl.getUrlObj(),
+            //     gid = params.search.state || params.hash.gid || params.search.gid;
+
+            // if (!gid) {
+            //     return $.Deferred().reject('缺少gid');
+            // };
+            // ldl.userData.gid = gid;
+        })
+        .fail(function() {
+            //如果在浏览器打开,根据需要跳转
+            if (!ldl.isWeixin && !ldl.isApp && ldl.getUrlObj().hash.showGuide==1) {
+            // if (!ldl.isWeixin && !ldl.isApp) {
+                ldl.checkOs().always(function() {
+                    if (!ldl.appInstalled){
+                        window.location = ldl.url2Download;
+                    }
+                });
+            }
+        })
+        .then(function() {
+            if (ldl.isApp){
+                //分享
+                var shareData = {
+                    // image_url:ldl.userData.avatarImage,
+                    image_url:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg',
+                    // link_url:'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
+                    link_url: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
+                    title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                    content:'乐动力步数投票，爱她就让她去人气组！',
+                    shared_to:1
+                };
+                ldl.app.setWebViewShare(JSON.stringify(shareData));
+            } else if(ldl.isWeixin) {
+                //微信分享
+                var wxScript = document.createElement('script');
+                wxScript.src = 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js';
+                wxScript.onload = function(){
+                    ldl.getData('http://walk.ledongli.cn:8090/v2/rest/users/wechatjssign',{url:encodeURIComponent(location.href)}).done(function(d){
+                        wx.config({
+                            debug: false,
+                            appId: 'wx13e719bc136549a8',
+                            timestamp: d.ret.timestamp,
+                            nonceStr: d.ret.nonceStr,
+                            signature: d.ret.signature,
+                            jsApiList: [
+                                'onMenuShareTimeline' ,
+                                'onMenuShareAppMessage' ,
+                                'onMenuShareQQ' ,
+                                'onMenuShareWeibo'
+                            ]
+                        });
+                        wx.ready(function () {
+                            var wxData = {
+                                title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                                desc: '乐动力步数投票，爱她就让她去人气组！',
+                                // link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
+                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
+                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg'
+                            };
+                            wx.onMenuShareAppMessage(wxData);
+                            wx.onMenuShareTimeline(wxData);
+                            wx.onMenuShareQQ(wxData);
+                            wx.onMenuShareWeibo(wxData);
+                        });
+                    });
+                }
+                document.body.appendChild(wxScript);
+            }
+        });
+
+        })();
+        function getData(url){
+            var deferred = $.Deferred();
+            deferred.fail(function() {
+                window.console && window.console.error('web connection error or server error');
+            });
+            $.ajax({
+                type: "GET",
+                url:url,
+                jsonp:"callback",
+                dataType:"jsonp",
+                timeout:5000,
+                success: function(data) {
+                    deferred.resolve(data);
+                },
+                error: function(err) {
+                    deferred.reject(err);
+                },
+            });
+            return deferred;
+        }
+        
+    </script>
+</body>
+
+</html>
