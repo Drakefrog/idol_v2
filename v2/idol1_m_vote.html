@@ -325,11 +325,22 @@
                     });
                 });
                 if (isInApp) {
-                    $voteItems.find("button").remove();
+                    // 在关闭投票时请打打开此处
+                    // $voteItems.find("button").remove();
                 } else {
-                    $voteItems.find("button").remove();
+                    // 在关闭投票时请打打开此处
+                    // $voteItems.find("button").remove();
+                    
+                    // 在打开投票时请打开此处
+                    $voteItems.find("button").hide();
                     //js接口检测,如果不在app内打开，投票页面显示引导按钮，下载app或拉起app
                     //需要修改href属性值
+                    var templ = '<div class="outapp" id="outapp1">' +
+                        '<a href="http://wise-adapt.ledongli.cn">' +
+                        '<img src="images/foot_banner.jpg"/>' +
+                        '</a>' +
+                        '</div>';
+                    $("body").append($(templ));
                 }
 
 
