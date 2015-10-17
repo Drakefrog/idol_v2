@@ -146,8 +146,8 @@
 
         // share
         var params = ldl.getUrlObj(),
-                showGuide = params.hash.showGuide,
-                showShare = params.hash.showShare;
+            showGuide = params.hash.showGuide,
+            showShare = params.hash.showShare;
 
             //微信浮层
             if (showGuide==1) {
@@ -225,11 +225,11 @@
                         });
                         wx.ready(function () {
                             var wxData = {
-                                title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                                title: '谁是你心目中的活力女神？爱她就用脚步帮她上头条!',
                                 desc: '乐动力步数投票，爱她就让她去人气组！',
                                 // link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
-                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
-                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg',
+                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v2/idol1_m_intro.html',
+                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v2/images/idol_logo.jpg',
                                 success: function () {
                                     // 用户确认分享后执行的回调函数
                                     $("#share_intro").click();
@@ -249,10 +249,10 @@
                 //分享
                 var shareData = {
                     // image_url:ldl.userData.avatarImage,
-                    image_url:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg',
+                    image_url:'http://h5.ledongli.cn/h5/walker_product/idol/v2/images/idol_logo.jpg',
                     // link_url:'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
-                    link_url:'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
-                    title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                    link_url:'http://h5.ledongli.cn/h5/walker_product/idol/v2/idol1_m_intro.html',
+                    title: '谁是你心目中的活力女神？爱她就用脚步帮她上头条!',
                     content:'乐动力步数投票，爱她就让她去人气组！',
                     shared_to:1
                 };
@@ -278,11 +278,11 @@
                         });
                         wx.ready(function () {
                             var wxData = {
-                                title: '《偶像来了》女神人气大比拼，人气最高的女神竟然是...',
+                                title: '谁是你心目中的活力女神？爱她就用脚步帮她上头条!',
                                 desc: '乐动力步数投票，爱她就让她去人气组！',
                                 // link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ldl.appid+'&redirect_uri=http%3A%2F%2Fh5.ledongli.cn%2Fwalk%2FgroupList.html&response_type=code&scope=snsapi_login&state='+ldl.userData.gid+'#wechat_redirect',
-                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v1/idol1_m_intro.html',
-                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v1/images/idol_logo.jpg'
+                                link: 'http://h5.ledongli.cn/h5/walker_product/idol/v2/idol1_m_intro.html',
+                                imgUrl:'http://h5.ledongli.cn/h5/walker_product/idol/v2/images/idol_logo.jpg'
                             };
                             wx.onMenuShareAppMessage(wxData);
                             wx.onMenuShareTimeline(wxData);
